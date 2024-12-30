@@ -60,5 +60,5 @@ public class UserController {
             return ResponseEntity.badRequest().body(Map.of("message", "로그인 처리 중 오류 발생: " + e.getMessage()));
         }
     }
-    GetMapping(/)
+
 }
