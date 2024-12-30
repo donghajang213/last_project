@@ -1,57 +1,39 @@
-// MyPage.js
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { UserContext } from '../../contexts/UserContext';
+import PetRegistrationModal from './PetRegistrationModal/PetRegistrationModal';
 import './MyPage.css';
 
 function MyPage() {
+  const { user } = useContext(UserContext);
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/api/pets`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => setPets(data))
+        .catch((error) => console.error('반려동물 정보 가져오기 실패:', error));
+    }
+  }, [user]);
+
+  const handlePetAdd = (newPet) => setPets([...pets, newPet]);
+  const handlePetDelete = (petId) => setPets(pets.filter((pet) => pet.id !== petId));
+
   return (
     <div className="mypage-container">
-      {/* 상단 사용자 정보 */}
-      <div className="user-info">
-        <h2>김건이님의 마이페이지</h2>
-        <div className="user-stats">
-          <div>
-            <p>건강체크</p>
-            <p>0회</p>
+      {user && <h2>{user.name}님의 마이페이지</h2>}
+      <div className="pet-list">
+        {pets.map((pet) => (
+          <div key={pet.id} className="pet-card">
+            <p>{pet.name}</p>
+            <button onClick={() => handlePetDelete(pet.id)}>삭제</button>
           </div>
-          <div>
-            <p>상담권</p>
-            <p>0개</p>
-          </div>
-          <div>
-            <p>멤버십</p>
-            <button>멤버십 가입 ></button>
-          </div>
-          <div>
-            <p>쿠폰</p>
-            <p>0개</p>
-          </div>
-          <div>
-            <p>적립금</p>
-            <p>0P</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 반려동물 정보 */}
-      <div className="pet-info">
-        <h3>김건이님의 반려동물</h3>
-        <div className="pet-list">
-          <div className="pet-card">
-            <img src="/images/sample-pet.jpg" alt="반려동물" />
-            <p>대한</p>
-          </div>
-          <div className="add-pet-card">
-            <button>+ 프로필 추가</button>
-          </div>
-        </div>
-      </div>
-
-      {/* 찜한 제품 */}
-      <div className="favorite-products">
-        <h3>찜한 제품</h3>
-        <div className="product-list">
-          <p>찜한 제품이 없습니다.</p>
-        </div>
+        ))}
+        <PetRegistrationModal onAdd={handlePetAdd} />
       </div>
     </div>
   );

@@ -1,18 +1,21 @@
-// 사용자 정보 상태 관리코드
+import React, { createContext, useState, useEffect } from 'react';
 
-import React, { createContext, useState } from 'react';
-
-// UserContext 생성
 export const UserContext = createContext();
 
-// UserContext Provider 컴포넌트
 export function UserProvider({ children }) {
-  const [user, setUser] = useState({
-    userId: 'testUser',
-    name: '테스트 사용자',
-    role: 'admin', // 'general', 'vet', 'seller', or 'admin'
-    isAuthenticated: true, // 로그인 상태
-  });
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    if (authToken) {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/api/user`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+        .then((response) => response.json())
+        .then((data) => setUser(data))
+        .catch((error) => console.error('유저 정보 가져오기 실패:', error));
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
