@@ -95,6 +95,17 @@ function SignupForm({ role, title }) {
           />
         </label>
 
+        <label>
+          생년월일:
+          <input
+            type="date"
+            name="birthDate"
+            value={formData.birthDate}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
         {/* 주소 입력 필드 */}
         <label>
           주소:
@@ -130,29 +141,21 @@ function SignupForm({ role, title }) {
 
         {/* 성별 입력 필드 */}
         <div className="gender-field">
-          <span>성별:</span>
           <label>
-            <input
-              type="radio"
+            성별:
+            <select
               name="gender"
-              value="남"
-              checked={formData.gender === '남'}
+              value={formData.gender}
               onChange={handleChange}
               required
-            />
-            남
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="여"
-              checked={formData.gender === '여'}
-              onChange={handleChange}
-            />
-            여
+            >
+              <option value="">선택하세요</option>
+              <option value="남">남</option>
+              <option value="여">여</option>
+            </select>
           </label>
         </div>
+
 
         {/* 수의사 가입 추가 필드 */}
         {role === 'vet' && (

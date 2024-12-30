@@ -62,3 +62,42 @@
 .address-modal button {
   margin-top: 10px;
 }
+
+.gender-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.gender-field label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.gender-field select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.birthdate-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.birthdate-field input {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.birthdate-field span {
+  font-size: 18px;
+  font-weight: bold;
+}
