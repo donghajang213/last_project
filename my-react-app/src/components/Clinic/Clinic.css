@@ -63,7 +63,7 @@ p {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  align-self: stretch; /* 버튼이 카드 전체 너비를 차지하도록 설정 */
+  /* align-self: stretch; /* 버튼이 카드 전체 너비를 차지하도록 설정 */
 }
 
 .option-button:hover {
