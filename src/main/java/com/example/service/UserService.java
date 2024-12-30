@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.UserEntity;
+import com.example.repository.PetRepository;
 import com.example.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,30 +12,14 @@ import java.util.UUID;
 
 @Service
 public class UserService {
-
-
-
     private final UserRepository userRepository;
+    private final PetRepository petRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository,PetRepository petRepository ,BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.petRepository = petRepository;
         this.passwordEncoder = passwordEncoder; // DI를 통해 Bean 주입
-    }
-
-    // 모든 사용자 조회
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    // 특정 이메일로 사용자 조회
-    public UserEntity getUserByEmail(String email) {
-        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByEmail(email));
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new RuntimeException("해당 이메일로 등록된 사용자가 없습니다.");
-        }
     }
 
     // 사용자 저장 (회원가입)
@@ -44,15 +29,24 @@ public class UserService {
         return userRepository.save(user); // Cassandra에 데이터 저장
     }
 
+    // 로그인 검증
     public boolean validateLogin(String userId, String rawPassword) {
-        // ID로 사용자 조회
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             UserEntity user = userOptional.get();
-            // 입력된 비밀번호(rawPassword)와 저장된 암호화된 비밀번호(user.getPassword()) 비교
             return passwordEncoder.matches(rawPassword, user.getPassword());
+        }
+        return false;
+    }
+
+    // 사용자 ID로 사용자 정보 조회
+    public UserEntity getUserById(String userId) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get();
         } else {
             throw new RuntimeException("해당 ID로 등록된 사용자가 없습니다.");
         }
     }
+
 }
