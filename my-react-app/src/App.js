@@ -28,11 +28,12 @@ import SignupSeller from './components/Signup/SignupSeller/SignupSeller'; // 판
 
 // 관리자
 import AdminPage from './components/AdminPage/AdminPage'; // 관리자 메인 페이지
-import Members from './components/AdminPage/Members/Members'; // 회원 정보 관리
-import AdminProducts from './components/AdminPage/Products/Products'; // 상품 정보 관리
-import Content from './components/AdminPage/Content/Content'; // 콘텐츠 관리
+import MemberInfo from './components/AdminPage/MemberInfo/MemberInfo'; // 회원 정보 관리
+import PermissionManagement from './components/AdminPage/PermissionManagement/PermissionManagement'; // 권한 관리
+import ProductManagement from './components/AdminPage/ProductManagement/ProductManagement'; // 상품 정보 관리
+import ContentManagement from './components/AdminPage/ContentManagement/ContentManagement'; // 콘텐츠 관리
 import Payments from './components/AdminPage/Payments/Payments'; // 결제 관리
-import Chats from './components/AdminPage/Chats/Chats'; // 대화 정보 관리
+import ChatInfo from './components/AdminPage/ChatInfo/ChatInfo'; // 대화 내역 관리
 import Dashboard from './components/AdminPage/Dashboard/Dashboard'; // 대시보드
 import ProtectedRoute from './components/ProtectedRoute'; // 인증된 사용자를 위한 보호된 라우트
 
@@ -68,11 +69,11 @@ function App() {
 
           {/* 관리자 페이지 */}
           <Route path="/admin" element={<ProtectedRoute element={<AdminPage />} />}>
-            <Route path="members" element={<Members />} /> {/* 회원 정보 관리 */}
-            <Route path="products" element={<AdminProducts />} /> {/* 상품 정보 관리 */}
-            <Route path="content" element={<Content />} /> {/* 콘텐츠 관리 */}
+            <Route path="memberinfo" element={<MemberInfo />} /> {/* 회원 정보 관리 */}
+            <Route path="productmanagement" element={<ProductManagement />} /> {/* 상품 정보 관리 */}
+            <Route path="contentmanagement" element={<ContentManagement />} /> {/* 콘텐츠 관리 */}
             <Route path="payments" element={<Payments />} /> {/* 결제 관리 */}
-            <Route path="chats" element={<Chats />} /> {/* 대화 정보 관리 */}
+            <Route path="chatinfo" element={<ChatInfo />} /> {/* 대화 정보 관리 */}
             <Route path="dashboard" element={<Dashboard />} /> {/* 대시보드 */}
           </Route>
         </Routes>

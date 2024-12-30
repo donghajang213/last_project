@@ -1,11 +1,15 @@
-.admin-page-container {
+.admin-page {
   display: flex;
+  height: 100vh;
+  background-color: #1e1e2f; /* 다크 테마 배경색 */
+  color: #fff;
 }
 
 .admin-sidebar {
-  width: 20%;
-  background-color: #f8f9fa;
+  width: 250px;
+  background-color: #252533; /* 네비게이션 바 색상 */
   padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .admin-sidebar ul {
@@ -14,19 +18,26 @@
 }
 
 .admin-sidebar li {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .admin-sidebar a {
+  color: #fff;
   text-decoration: none;
-  color: #333;
+  font-size: 16px;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 4px;
+  transition: background 0.3s;
 }
 
 .admin-sidebar a:hover {
-  color: #007bff;
+  background-color: #3a3a56;
 }
 
 .admin-content {
   flex-grow: 1;
   padding: 20px;
+  background-color: #292940;
+  overflow-y: auto;
 }

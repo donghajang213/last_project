@@ -14,9 +14,9 @@ function SignupForm({ role, title }) {
     detailAddress: '', // 상세 주소
     gender: '', // 성별
     birthDate: '', // 생년월일
-    vetLicense: '',
-    bankAccount: '',
-    businessNumber: '',
+    vetLicense: '', // 수의사 면허
+    bankAccount: '', // 은행 계좌
+    businessNumber: '', // 사업자 번호
     role: role,
   });
 

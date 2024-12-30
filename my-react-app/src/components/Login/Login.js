@@ -21,11 +21,12 @@ function Login() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
+        credentials: 'include', // 세션 쿠키를 저장
       });
 
       if (response.ok) {
         const user = await response.json();
-        setUser(user);
+        setUser(user); // 유저 정보 저장
         alert('로그인 성공!');
         navigate('/');
       } else {
