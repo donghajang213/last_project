@@ -30,7 +30,7 @@ function Header() {
                 <Link to="/login" onClick={() => alert('로그인이 필요합니다.')}>마이페이지</Link>
               )}
           </li>
-          {user && user.role === 'admin' && (
+          {user && user.userRole === 'admin' && (
             <li><Link to="/admin">관리자</Link></li> // 관리자 전용 버튼
           )}
           {user ? (

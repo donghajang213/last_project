@@ -10,7 +10,7 @@ function ProtectedRoute({ element }) {
     return <Navigate to="/login" />;
   }
 
-  if (user.role !== 'admin') {
+  if (user.userRole !== 'admin') {
     return <Navigate to="/" />;
   }
 

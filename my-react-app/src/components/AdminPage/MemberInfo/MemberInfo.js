@@ -25,7 +25,7 @@ function MemberInfo() {
       <h2>회원정보</h2>
       <div className="filter">
         <button onClick={() => setFilter('all')}>전체</button>
-        <button onClick={() => setFilter('general')}>일반 가입자</button>
+        <button onClick={() => setFilter('general')}>일반 회원</button>
         <button onClick={() => setFilter('vet')}>수의사</button>
         <button onClick={() => setFilter('seller')}>판매자</button>
       </div>
