@@ -10,6 +10,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -46,10 +47,34 @@ public class UserEntity {
     @Column("phone_number")
     private String phoneNumber;
 
+    @Column("bank_account") // 계좌번호
+    private String bankAccount;
+
+    @Column("business_number") // 사업자 번호
+    private String businessNumber;
+
+    @Column("user_regdate") // 가입일
+    private LocalDateTime userRegdate;
+
+    @Column("user_role") // 사용자 역할
+    private String userRole;
+
+    @Column("user_sns_dist") // SNS 가입 여부
+    private String userSnsDist;
+
+    @Column("user_status") // 사용자 상태
+    private Integer userStatus;
+
+    @Column("vet_license") // 수의사 면허번호
+    private String vetLicense;
+
     public UserEntity() {
     }
 
-    public UserEntity(String userId, String address, LocalDate birthDate, String detailedAddress, String email, String gender, String name, String password, String phoneNumber) {
+    public UserEntity(String userId, String address, LocalDate birthDate, String detailedAddress, String email,
+                      String gender, String name, String password, String phoneNumber, String bankAccount,
+                      String businessNumber, LocalDateTime userRegdate, String userRole, String userSnsDist,
+                      Integer userStatus, String vetLicense) {
         this.userId = userId;
         this.address = address;
         this.birthDate = birthDate;
@@ -59,6 +84,13 @@ public class UserEntity {
         this.name = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.bankAccount = bankAccount;
+        this.businessNumber = businessNumber;
+        this.userRegdate = userRegdate;
+        this.userRole = userRole;
+        this.userSnsDist = userSnsDist;
+        this.userStatus = userStatus;
+        this.vetLicense = vetLicense;
     }
 
     @Override
@@ -71,7 +103,15 @@ public class UserEntity {
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
                 ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", businessNumber='" + businessNumber + '\'' +
+                ", userRegdate=" + userRegdate +
+                ", userRole='" + userRole + '\'' +
+                ", userSnsDist='" + userSnsDist + '\'' +
+                ", userStatus=" + userStatus +
+                ", vetLicense='" + vetLicense + '\'' +
                 '}';
     }
 }
