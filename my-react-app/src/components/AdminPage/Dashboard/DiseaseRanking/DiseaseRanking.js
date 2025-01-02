@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function DiseaseRanking() {
-  const diseaseData = [
-    { name: '피부병', count: 120 },
-    { name: '눈 질환', count: 80 },
-    { name: '소화기 질환', count: 60 },
-    { name: '호흡기 질환', count: 40 },
-    { name: '관절염', count: 20 },
-    { name: '기타', count: 10 },
-  ];
+  const [diseaseData, setDiseaseData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDiseaseData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/rankings/diseases`);
+        if (!response.ok) {
+          throw new Error('질병 데이터를 가져오는데 실패했습니다.');
+        }
+        const data = await response.json();
+        setDiseaseData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDiseaseData();
+  }, []);
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>오류 발생: {error}</div>;
 
   return (
     <div>
