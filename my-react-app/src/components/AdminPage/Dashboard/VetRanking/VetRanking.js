@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 function VetRanking() {
   const [vetData, setVetData] = useState([]); // 수의사 데이터를 저장
@@ -8,7 +9,7 @@ function VetRanking() {
   useEffect(() => {
     const fetchVetData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/rankings/vets`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ranking/vet`);
         if (!response.ok) {
           throw new Error('수의사 데이터를 가져오는데 실패했습니다.');
         }
@@ -30,13 +31,15 @@ function VetRanking() {
   return (
     <div>
       <h1>수의사 랭킹</h1>
-      <ul>
-        {vetData.map((vet, index) => (
-          <li key={index}>
-            {index + 1}. {vet.name} - 평점 {vet.rating}
-          </li>
-        ))}
-      </ul>
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart data={vetData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="vetName" label={{ value: "수의사 이름", position: "insideBottom", offset: -5 }} />
+          <YAxis label={{ value: "평점", angle: -90, position: "insideLeft" }} />
+          <Tooltip />
+          <Bar dataKey="vetRating" fill="#82ca9d" name="평점" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }

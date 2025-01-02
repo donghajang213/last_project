@@ -1,44 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 
-// 상품 랭킹 컴포넌트
 function ProductRanking() {
-  const [productData, setProductData] = useState([]); // 상품 데이터를 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태 관리
-  const [error, setError] = useState(null); // 에러 상태 관리
+  const [productData, setProductData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        // 백엔드에서 상품 데이터를 가져옴
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/rankings/products`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ranking/product`);
         if (!response.ok) {
           throw new Error('상품 데이터를 가져오는데 실패했습니다.');
         }
         const data = await response.json();
-        setProductData(data); // 데이터 저장
+        setProductData(data);
       } catch (err) {
-        setError(err.message); // 에러 메시지 저장
+        setError(err.message);
       } finally {
-        setLoading(false); // 로딩 상태 종료
+        setLoading(false);
       }
     };
 
     fetchProductData();
   }, []);
 
-  if (loading) return <div>로딩 중...</div>; // 로딩 상태 표시
-  if (error) return <div>오류 발생: {error}</div>; // 에러 상태 표시
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>오류 발생: {error}</div>;
 
   return (
     <div>
       <h1>상품 랭킹</h1>
-      <ul>
-        {productData.map((product, index) => (
-          <li key={index}>
-            {index + 1}. {product.name} - {product.sales}개 판매
-          </li>
-        ))}
-      </ul>
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart data={productData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="productName" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="productSales" fill="#82ca9d" name="판매량" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }
