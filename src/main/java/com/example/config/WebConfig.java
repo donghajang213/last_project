@@ -1,8 +1,11 @@
 package com.example.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -15,4 +18,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*") // 모든 요청 헤더 허용
                 .allowCredentials(true); // 자격 증명(쿠키 등) 허용
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:/E:/atopia/last_project/uploads/");
+    }
+
 }
