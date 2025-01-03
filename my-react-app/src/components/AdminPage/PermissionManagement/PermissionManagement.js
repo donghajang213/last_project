@@ -14,19 +14,27 @@ function PermissionManagement() {
     fetchRequests();
   }, []);
 
-  const handleApprove = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_BASE_URL}/admin/permissions/${id}/approve`, { method: 'POST' });
-    setRequests(requests.map((req) => (req.id === id ? { ...req, status: 'approved' } : req)));
+  const handleApprove = async (userId, role) => {
+    console.log("승인 요청 보내기: " , userId, role); // 로그 추가
+    await fetch(`${process.env.REACT_APP_API_BASE_URL}/admin/approve/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ role }),
+    });
+    setRequests(requests.map((req) => (req.userId === userId ? { ...req, userRole: role } : req)));
   };
 
-  const handleReject = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_BASE_URL}/admin/permissions/${id}/reject`, { method: 'POST' });
-    setRequests(requests.map((req) => (req.id === id ? { ...req, status: 'rejected' } : req)));
+  const handleReject = async (userId) => {
+    await fetch(`${process.env.REACT_APP_API_BASE_URL}/admin/rejectRole/${userId}`, {
+      method: 'PUT' });
+    setRequests(requests.map((req) => (req.userId === userId ? { ...req, userRole: 'REJECTED' } : req)));
   };
 
   return (
     <div className="permission-management">
-      <h2>권한정보</h2>
+      <h2>권한 정보 관리</h2>
       <table>
         <thead>
           <tr>
@@ -39,16 +47,16 @@ function PermissionManagement() {
         </thead>
         <tbody>
           {requests.map((request) => (
-            <tr key={request.id}>
+            <tr key={request.userId}>
               <td>{request.name}</td>
-              <td>{request.role}</td>
-              <td>{request.role === 'vet' ? request.vetLicense : request.businessNumber}</td>
-              <td>{request.status}</td>
+              <td>{request.userRole}</td>
+              <td>{request.userRole === 'VET' ? request.vetLicense : request.businessNumber}</td>
+              <td>{request.userRole}</td>
               <td>
-                {request.status === 'pending' && (
+                {request.userRole === 'PENDING' && (
                   <>
-                    <button onClick={() => handleApprove(request.id)}>승인</button>
-                    <button onClick={() => handleReject(request.id)}>거부</button>
+                    <button onClick={() => handleApprove(request.userId, 'VET')}>승인</button>
+                    <button onClick={() => handleReject(request.userId)}>거부</button>
                   </>
                 )}
               </td>

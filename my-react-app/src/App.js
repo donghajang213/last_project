@@ -8,6 +8,7 @@ import MainPage from './components/MainPage/MainPage'; // 메인 페이지 컴�
 import Header from './components/Header/Header'; // 공통 헤더
 import Login from './components/Login/Login'; // 로그인 페이지
 import Clinic from './components/Clinic/Clinic'; // 클리닉 메인 페이지
+import VetSelectWithGps from './components/Clinic/VetSelect/VetSelectWithGps' // 상담사 선택 페이지
 import GPTConsult from './components/Clinic/GPTConsult/GPTConsult'; // GPT 상담 페이지
 import VetConsult from './components/Clinic/VetConsult/VetConsult'; // 수의사 상담 페이지
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="/" element={<MainPage />} /> {/* 메인 페이지 */}
             <Route path="/login" element={<Login />} /> {/* 로그인 페이지 */}
             <Route path="/clinic" element={<Clinic />} /> {/* 클리닉 메인 페이지 */}
+            <Route path="/clinic/vetselect" element={<VetSelectWithGps />} /> {/* 수의사 선택 페이지*/}
             <Route path="/clinic/gpt" element={<GPTConsult />} /> {/* GPT 상담 페이지 */}
             <Route path="/clinic/vet" element={<VetConsult />} /> {/* 수의사 상담 페이지 */}
             <Route path="/mypage" element={<MyPage />} /> {/* 마이페이지 */}

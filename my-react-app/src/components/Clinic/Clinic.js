@@ -23,7 +23,7 @@ function Clinic() {
         {/* 수의사 상담 */}
         <div className="option">
           <img src="/images/vet_consult.png" alt="수의사 상담" className="option-image" />
-          <button className="option-button" onClick={() => handleProtectedAccess('/clinic/vet')}>
+          <button className="option-button" onClick={() => handleProtectedAccess('/clinic/vetselect')}>
             수의사 상담
           </button>
         </div>

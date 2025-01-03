@@ -21,7 +21,7 @@ function Header() {
       </div>
       <nav>
         <ul className="nav-list">
-          <li><Link to="/clinic">클리닉</Link></li>
+          <li><Link to="/clinic/">클리닉</Link></li>
           <li><Link to="/store">스토어</Link></li>
           <li>
               {user ? (
