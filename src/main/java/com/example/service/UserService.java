@@ -27,7 +27,7 @@ public class UserService {
         this.userRepository = userRepository;
         this.petRepository = petRepository;
         this.passwordEncoder = passwordEncoder; // DI를 통해 Bean 주입
-        this.fileStorageLocation = Paths.get("E:/images");
+        this.fileStorageLocation = Paths.get("C:/images");
 
         // 경로 생성
         try {

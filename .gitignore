@@ -38,3 +38,16 @@ out/
 
 /node_modules
 /.idea
+
+# Gradle 빌드 파일
+build.gradle
+
+# Spring Boot 설정 파일
+application.properties
+
+# Node.js 관련 파일
+package.json
+package-lock.json
+
+# Node.js 모듈 디렉토리
+node_modules/

@@ -103,4 +103,14 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpSession session) {
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
+            System.out.println("로그아웃 성공: 세션이 무효화되었습니다.");
+            return ResponseEntity.ok(Map.of("message", "로그아웃 성공"));
+        }
+        System.out.println("로그아웃 실패: 세션이 이미 무효화되었습니다.");
+        return ResponseEntity.status(400).body("세션이 없습니다.");
+    }
 }
