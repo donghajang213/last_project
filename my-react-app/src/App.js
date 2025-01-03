@@ -29,7 +29,7 @@ import SignupSeller from './components/Signup/SignupSeller/SignupSeller'; // 판
 
 // 관리자
 import AdminPage from './components/AdminPage/AdminPage'; // 관리자 메인 페이지
-import MemberInfo from './components/AdminPage/MemberInfo/MemberInfo'; // 회원 정보 관리
+import MemberInfo from './components/AdminPage/UserInfo/UserInfo'; // 회원 정보 관리
 import PermissionManagement from './components/AdminPage/PermissionManagement/PermissionManagement'; // 권한 관리
 import ProductManagement from './components/AdminPage/ProductManagement/ProductManagement'; // 상품 정보 관리
 import ContentManagement from './components/AdminPage/ContentManagement/ContentManagement'; // 콘텐츠 관리

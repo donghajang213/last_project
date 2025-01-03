@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 
 // 회원 정보 및 권한 관리
-import MemberInfo from './MemberInfo/MemberInfo';
+import UserInfo from './UserInfo/UserInfo';
 import PermissionManagement from './PermissionManagement/PermissionManagement';
 
 // 상품 관리
@@ -22,6 +22,12 @@ import BreedRanking from './Dashboard/BreedRanking/BreedRanking';
 import SignupRanking from './Dashboard/SignupRanking/SignupRanking';
 import ProductRanking from './Dashboard/ProductRanking/ProductRanking';
 import OriginRanking from './Dashboard/OriginRanking/OriginRanking';
+
+// 콘텐츠 관리 하위 컴포넌트
+import ContentManagement from './ContentManagement/ContentManagement';
+import EventManagement from './ContentManagement/EventManagement/EventManagement';
+import BannerManagement from './ContentManagement/BannerManagement/BannerManagement';
+
 
 import './AdminPage.css';
 
@@ -72,13 +78,13 @@ function AdminPage() {
 
           {/* 회원정보 */}
           <li className="menu-item">
-            <div onClick={() => toggleMenu('memberInfo')} className="menu-title">
+            <div onClick={() => toggleMenu('userInfo')} className="menu-title">
               회원정보
             </div>
-            {activeMenu === 'memberInfo' && (
+            {activeMenu === 'userInfo' && (
               <ul className="submenu">
                 <li>
-                  <Link to="memberinfo">회원 정보 보기</Link>
+                  <Link to="userinfo">회원 정보 보기</Link>
                 </li>
               </ul>
             )}
@@ -119,15 +125,21 @@ function AdminPage() {
           </li>
 
           {/* 콘텐츠 관리 */}
-          <li className="menu-item">
-            <div onClick={() => toggleMenu('contentManagement')} className="menu-title">
-              콘텐츠 관리
-            </div>
-            {activeMenu === 'contentManagement' && (
-              <ul className="submenu">
-                <li>
-                  <Link to="contentmanagement">콘텐츠 목록</Link>
-                </li>
+            <li className="menu-item">
+              <div onClick={() => toggleMenu('contentManagement')} className="menu-title">
+                콘텐츠 관리
+              </div>
+              {activeMenu === 'contentManagement' && (
+                <ul className="submenu">
+                  <li>
+                    <Link to="contentmanagement">콘텐츠 목록</Link>
+                  </li>
+                  <li>
+                    <Link to="contentmanagement/event">이벤트 관리</Link>
+                  </li>
+                  <li>
+                    <Link to="contentmanagement/banner">배너 관리</Link>
+                  </li>
               </ul>
             )}
           </li>
@@ -175,7 +187,7 @@ function AdminPage() {
           <Route path="dashboard/origin" element={<OriginRanking />} />
 
           {/* 회원 관리 하위 라우트 */}
-          <Route path="memberinfo" element={<MemberInfo />} />
+          <Route path="userinfo" element={<UserInfo />} />
 
           {/* 권한 관리 하위 라우트 */}
           <Route path="permissionmanagement" element={<PermissionManagement />} />
@@ -185,8 +197,11 @@ function AdminPage() {
           <Route path="productmanagement/detail" element={<ProductDetails />} />
           <Route path="productmanagement/editdelete" element={<ProductEditDelete />} />
 
-          {/* 콘텐츠 라우트 */}
-          <Route path="contentmanagement" element={<div>콘텐츠 관리 페이지</div>} />
+          {/* 콘텐츠 관리 하위 라우트 */}
+          <Route path="contentmanagement" element={<ContentManagement />} />
+          <Route path="contentmanagement/event" element={<EventManagement />} />
+          <Route path="contentmanagement/banner" element={<BannerManagement />} />
+
 
           {/* 결제 관리 하위 라우트 */}
           <Route path="payments" element={<Payments />} />

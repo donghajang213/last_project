@@ -1,0 +1,47 @@
+.user-info {
+  padding: 20px;
+  background-color: #1f1f2e;
+  color: white;
+}
+
+.filter button {
+  margin-right: 10px;
+  padding: 8px 15px;
+  background-color: #5a5aff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter button:hover {
+  background-color: #3e3eff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #3e3e50;
+}
+
+table th {
+  background-color: #2a2a3e;
+}
+
+.error {
+  color: red;
+}
+
+.user-details {
+  background-color: #2a2a3e;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
