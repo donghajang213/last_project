@@ -8,66 +8,63 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
+
 @Getter
 @Setter
 @Data
-@Table("pets")
+@Table("pets") // Cassandra 테이블 이름
 public class PetEntity {
 
     @PrimaryKey
     @Id
     @Column("pet_id") // 반려동물 ID
-    private String petId;
+    private UUID petId;
 
     @Column("user_id") // 사용자 ID
     private String userId;
 
-    @Column("pet_name") // 반려동물 이름
-    private String petName;
+    @Column("name") // 반려동물 이름
+    private String name;
 
     @Column("breed") // 품종
     private String breed;
 
-    @Column("birth_year") // 태어난 연도
-    private Integer birthYear;
-
-    @Column("birth_month") // 태어난 달
-    private Integer birthMonth;
-
-    @Column("birth_day") // 태어난 날짜
-    private Integer birthDay;
+    // birth_date를 LocalDate 타입으로 변경
+    @Column("birth_date")
+    private LocalDate birthDate;
 
     @Column("gender") // 성별
     private String gender;
 
-    @Column("neutered") // 중성화 여부
-    private Boolean neutered;
+    @Column("neutering_status") // 중성화 여부
+    private String neuteringStatus;
 
-    @Column("weight") // 몸무게
-    private Double weight;
+    @Column("weight_kg") // 몸무게 (kg)
+    private BigDecimal weightKg;
 
     @Column("registration_number") // 등록 번호
     private String registrationNumber;
 
-    @Column("photo_url") // 사진 URL
-    private String photoUrl;
+    @Column("pet_image") // 반려동물 사진 경로
+    private String petImage;
 
     public PetEntity() {}
 
-    public PetEntity(String petId, String userId, String petName, String breed, Integer birthYear, Integer birthMonth,
-                     Integer birthDay, String gender, Boolean neutered, Double weight, String registrationNumber, String photoUrl) {
+    public PetEntity(UUID petId, String userId, String name, String breed, LocalDate birthDate, String gender,
+                     String neuteringStatus, BigDecimal weightKg, String registrationNumber, String petImage) {
         this.petId = petId;
         this.userId = userId;
-        this.petName = petName;
+        this.name = name;
         this.breed = breed;
-        this.birthYear = birthYear;
-        this.birthMonth = birthMonth;
-        this.birthDay = birthDay;
+        this.birthDate = birthDate;
         this.gender = gender;
-        this.neutered = neutered;
-        this.weight = weight;
+        this.neuteringStatus = neuteringStatus;
+        this.weightKg = weightKg;
         this.registrationNumber = registrationNumber;
-        this.photoUrl = photoUrl;
+        this.petImage = petImage;
     }
 
     @Override
@@ -75,16 +72,14 @@ public class PetEntity {
         return "PetEntity{" +
                 "petId='" + petId + '\'' +
                 ", userId='" + userId + '\'' +
-                ", petName='" + petName + '\'' +
+                ", name='" + name + '\'' +
                 ", breed='" + breed + '\'' +
-                ", birthYear=" + birthYear +
-                ", birthMonth=" + birthMonth +
-                ", birthDay=" + birthDay +
+                ", birthDate='" + birthDate + '\'' +
                 ", gender='" + gender + '\'' +
-                ", neutered=" + neutered +
-                ", weight=" + weight +
+                ", neuteringStatus='" + neuteringStatus + '\'' +
+                ", weightKg=" + weightKg +
                 ", registrationNumber='" + registrationNumber + '\'' +
-                ", photoUrl='" + photoUrl + '\'' +
+                ", petImage='" + petImage + '\'' +
                 '}';
     }
 }

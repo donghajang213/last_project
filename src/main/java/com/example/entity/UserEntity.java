@@ -53,6 +53,9 @@ public class UserEntity {
     @Column("business_number") // 사업자 번호
     private String businessNumber;
 
+    @Column("vet_image") // 수의사 이미지 경로
+    private String vetImage;
+
     @Column("user_regdate") // 가입일
     private LocalDateTime userRegdate;
 
@@ -73,8 +76,8 @@ public class UserEntity {
 
     public UserEntity(String userId, String address, LocalDate birthDate, String detailedAddress, String email,
                       String gender, String name, String password, String phoneNumber, String bankAccount,
-                      String businessNumber, LocalDateTime userRegdate, String userRole, String userSnsDist,
-                      Integer userStatus, String vetLicense) {
+                      String businessNumber, String vetImage, LocalDateTime userRegdate, String userRole,
+                      String userSnsDist, Integer userStatus, String vetLicense) {
         this.userId = userId;
         this.address = address;
         this.birthDate = birthDate;
@@ -86,6 +89,7 @@ public class UserEntity {
         this.phoneNumber = phoneNumber;
         this.bankAccount = bankAccount;
         this.businessNumber = businessNumber;
+        this.vetImage = vetImage;
         this.userRegdate = userRegdate;
         this.userRole = userRole;
         this.userSnsDist = userSnsDist;
@@ -107,6 +111,7 @@ public class UserEntity {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", bankAccount='" + bankAccount + '\'' +
                 ", businessNumber='" + businessNumber + '\'' +
+                ", vetImage='" + vetImage + '\'' +
                 ", userRegdate=" + userRegdate +
                 ", userRole='" + userRole + '\'' +
                 ", userSnsDist='" + userSnsDist + '\'' +
