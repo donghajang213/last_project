@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.entity.UserEntity;
 import com.example.repository.PetRepository;
 import com.example.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,19 +61,65 @@ public class UserService {
         // 비밀번호 암호화
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        System.out.println("저장 전 역할: " + user.getUserRole()); // 역할 로그 추가
+
         // 사용자 역할에 따라 필드 설정
-        if("VET".equals(user.getUserRole())) {
+        if ("PENDING".equals(user.getUserRole())) {
             if (user.getVetImage() == null) {
                 user.setVetImage("default_image.jpg");
             }
-        }else {
-            // 일반 회원 또는 판매자일 경우 수의사 필드 초기화
+        } else {
+            // 일반 회원 또는 판매자일 경우 수의사 관련 필드 초기화
             user.setVetImage(null);
             user.setVetLicense(null);
             user.setBankAccount(null);
             user.setBusinessNumber(null);
         }
-        return userRepository.save(user); // Cassandra에 데이터 저장
+
+        UserEntity savedUser = userRepository.save(user); // Cassandra에 데이터 저장
+        System.out.println("저장 후 역할: " + savedUser.getUserRole()); // 역할 저장 후 로그
+
+        return savedUser;
+    }
+
+
+    // PENDING 상태의 사용자 목록 가져오기
+    public List<UserEntity> getPendingUsers(){
+        return userRepository.findByUserRole("PENDING");
+    }
+
+    // 사용자 역할 승인
+    public ResponseEntity<?> approveUserRole(String userId, String role) {
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if(userOptional.isPresent()) {
+            UserEntity user = userOptional.get();
+            if("PENDING".equals(user.getUserRole())){
+                user.setUserRole(role);
+                userRepository.save(user);
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.badRequest().body("승인되지 않은 역할 변경 요청입니다.");
+            }
+        } else{
+            return ResponseEntity.status(404).body("사용자를 찾을 수 없습니다.");
+        }
+    }
+
+    // 사용자 역할 거부
+    public ResponseEntity<?> rejectUserRole(String userId){
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if(userOptional.isPresent()) {
+            UserEntity user = userOptional.get();
+            if("PENDING".equals(user.getUserRole())){
+                user.setUserRole("REJECTED");
+                userRepository.save(user);
+                return ResponseEntity.ok(user);
+            } else{
+                return ResponseEntity.badRequest().body("거부되지 않은 역할 변경 요청입니다.");
+            }
+        } else {
+            return ResponseEntity.status(404).body("사용자를 찾을 수 없습니다.");
+        }
     }
 
 
@@ -81,6 +128,9 @@ public class UserService {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             UserEntity user = userOptional.get();
+            if ("REJECTED".equals(user.getUserRole())) {
+                return false;
+            }
             return passwordEncoder.matches(rawPassword, user.getPassword());
         }
         return false;
