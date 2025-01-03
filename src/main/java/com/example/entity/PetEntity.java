@@ -45,6 +45,7 @@ public class PetEntity {
     @Column("weight_kg") // 몸무게 (kg)
     private BigDecimal weightKg;
 
+
     @Column("registration_number") // 등록 번호
     private String registrationNumber;
 
