@@ -1,24 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 function ProductRanking() {
-  const productData = [
-    { name: '강아지 사료', sales: 500 },
-    { name: '고양이 사료', sales: 400 },
-    { name: '애견 샴푸', sales: 250 },
-    { name: '고양이 간식', sales: 200 },
-    { name: '강아지 장난감', sales: 150 },
-  ];
+  const [productData, setProductData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ranking/product`);
+        if (!response.ok) {
+          throw new Error('상품 데이터를 가져오는데 실패했습니다.');
+        }
+        const data = await response.json();
+        setProductData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductData();
+  }, []);
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>오류 발생: {error}</div>;
 
   return (
     <div>
       <h1>상품 랭킹</h1>
-      <ul>
-        {productData.map((product, index) => (
-          <li key={index}>
-            {index + 1}. {product.name} - {product.sales}개 판매
-          </li>
-        ))}
-      </ul>
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart data={productData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="productName" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="productSales" fill="#82ca9d" name="판매량" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }

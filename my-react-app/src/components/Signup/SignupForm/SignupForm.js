@@ -11,14 +11,14 @@ function SignupForm({ role, title }) {
     email: '',
     phoneNumber: '',
     address: '', // 기본 주소
-    detailAddress: '', // 상세 주소
+    detailedAddress: '', // 상세 주소
     gender: '', // 성별
     birthDate: '', // 생년월일
+    vetImage: '', //수의사 이미지
     vetLicense: '', // 수의사 면허
-    vetImage: null, // 수의사 사진
     bankAccount: '', // 은행 계좌
     businessNumber: '', // 사업자 번호
-    role: role,
+    userRole: role,
   });
 
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false); // 주소 모달 상태
@@ -26,16 +26,19 @@ function SignupForm({ role, title }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+
+  // 파일 입력 처리 함수
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFormData({
+      ...formData,
+      vetImage: file,
+    });
+  };
   // 입력값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  // 파일 입력 핸들러
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({ ...formData, vetImage: file });
   };
 
   // 주소 선택 핸들러
@@ -47,37 +50,44 @@ function SignupForm({ role, title }) {
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const data = new FormData();
-    data.append('userId', formData.userId);
-    data.append('password', formData.password);
-    data.append('name', formData.name);
-    data.append('email', formData.email);
-    data.append('phoneNumber', formData.phoneNumber);
-    data.append('address', formData.address);
-    data.append('detailedAddress', formData.detailedAddress);
-    data.append('gender', formData.gender);
-    data.append('birthDate', formData.birthDate);
-    data.append('vetLicense', formData.vetLicense);
-    data.append('vetImage', formData.vetImage); // 파일 추가
-
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/signup`, {
-        method: "POST",
-        body: data,
-      });
-      if (!response.ok) {
-        throw new Error("회원가입 실패");
+      const formDataToSend = new FormData();
+
+      // vetImage를 제외한 나머지 폼 데이터를 JSON으로 변환하여 "user"필드로 추가
+      const { vetImage, ...userData } = formData; // vetImage만 제외
+      formDataToSend.append("user", new Blob([JSON.stringify(userData)], { type: 'application/json' })); // user 필드 추가
+
+      // vetImage 파일 추가
+      if (formData.vetImage) {
+        formDataToSend.append("vetImage", formData.vetImage);
       }
-      alert("회원가입 성공");
+
+      // 로그 추가
+      for (let pair of formDataToSend.entries()){
+        console.log(pair[0] + ', ' + pair[1]);
+      }
+
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/user/signup`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+        },
+        body: formDataToSend, // FormData 전송
+      });
+
+      if (response.ok) {
+        setSuccessMessage('회원가입 성공! 로그인 페이지로 이동합니다.');
+        setTimeout(() => navigate('/user/login'), 2000);
+      } else {
+        const error = await response.json();
+        console.error("서버 응답 에러: ", error)
+        setErrorMessage(error.message || '회원가입 실패.');
+      }
     } catch (error) {
-      console.error(error.message);
+      console.error("catch 블록 에러: ", error)
+      setErrorMessage('서버 오류가 발생했습니다.');
     }
   };
-
-
-
-
 
   return (
       <div className="signup-container">
@@ -108,7 +118,7 @@ function SignupForm({ role, title }) {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 placeholder="010-1234-5678"
-                pattern="010[-]?[0-9]{4}[-]?[0-9]{4}"
+                pattern="^010[-]?[0-9]{4}[-]?[0-9]{4}$"
                 required
             />
           </label>
@@ -156,6 +166,7 @@ function SignupForm({ role, title }) {
             />
           </label>
 
+
           {/* 성별 입력 필드 */}
           <div className="gender-field">
             <label>
@@ -173,6 +184,7 @@ function SignupForm({ role, title }) {
             </label>
           </div>
 
+
           {/* 수의사 가입 추가 필드 */}
           {role === 'vet' && (
               <>
@@ -181,13 +193,8 @@ function SignupForm({ role, title }) {
                   <input type="text" name="vetLicense" value={formData.vetLicense} onChange={handleChange} required />
                 </label>
                 <label>
-                  수의사 사진:
-                  <input
-                      type="file"
-                      name="vetImage"
-                      onChange={handleFileChange} // 파일 입력 핸들러
-                      required
-                  />
+                  수의사 사진
+                  <input type="file" name="vetImage" onChange={handleFileChange} />
                 </label>
                 <label>
                   계좌번호:
