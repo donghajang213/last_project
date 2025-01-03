@@ -6,7 +6,9 @@ import com.example.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -29,15 +31,49 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody UserEntity user) {
+    public ResponseEntity<?> createUser(@RequestPart("user") UserEntity user,
+                                        @RequestPart(value = "vetImage", required = false) MultipartFile vetImage) {
+
+        // 수동 유효성 검사
+        if (user.getUserId() == null || user.getUserId().isEmpty()) {
+            return ResponseEntity.badRequest().body("유효성 검사 실패: 아이디는 필수 항목입니다.");
+        }
+
+        // 수의사 유효성 검사
+        if("VET".equals(user.getUserRole())) {
+            if (user.getVetLicense() == null || user.getVetLicense().isEmpty()) {
+                return ResponseEntity.badRequest().body("유효성 검사 실패: 수의사 면허번호는 필수 항목입니다.");
+            }
+            if(vetImage == null || vetImage.isEmpty()) {
+                return ResponseEntity.badRequest().body("유효성 검사 실패: 수의사 이미지는 필수 항목입니다.");
+
+            }
+        }
+
         try {
+            // 수의사 이미지 처리
+            if ("VET".equals(user.getUserRole()) && vetImage != null) {
+                // 이미지 파일을 저장하거나 다른 방법으로 처리
+                String imagePath = userService.storeVetImage(vetImage);
+                user.setVetImage(imagePath); // 이미지 경로를 사용자 엔티티에 설정
+
+            } else {
+                // 일반 회원 또는 판매자일 경우 수의사 관련 필드 초기화
+                user.setVetImage(null);
+                user.setVetLicense(null);
+                user.setBankAccount(null);
+                user.setBusinessNumber(null);
+            }
+
             UserEntity savedUser = userService.saveUser(user); // 데이터 저장
             return ResponseEntity.ok(savedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("유효하지 않은 파일 업로드: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("회원가입 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.status(500).body("서버 내부 오류: " + e.getMessage());
         }
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserEntity loginRequest, HttpSession session) {
         String userId = loginRequest.getUserId();
