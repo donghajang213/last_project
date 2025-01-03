@@ -20,6 +20,12 @@ public class VetService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    public VetService(VetRepository vetRepository, UserRepository userRepository) {
+        this.vetRepository = vetRepository;
+        this.userRepository = userRepository;
+    }
+
     public List<VetEntity> getAllVets() {
         return vetRepository.findAll();
     }
@@ -38,7 +44,7 @@ public class VetService {
 
     // 수의사 역할을 가진 사용자를 vets 테이블에 추가하는 메소드
     public void addVetsFromUsers() {
-        List<UserEntity> users = userRepository.findByUserRole("Vet");
+        List<UserEntity> users = userRepository.findByUserRole("VET");
         for (UserEntity user : users) {
             VetEntity vet = new VetEntity();
             vet.setUserId(user.getUserId());
@@ -50,6 +56,23 @@ public class VetService {
             vet.setConsultationCount(0); // 초기 상담 건수
             vet.setVetRating(0); // 초기 평점
             vet.setVetReview(""); // 초기 리뷰
+
+            vetRepository.save(vet);
         }
+//
+//        public void addVetFromUser (UserEntity user){
+//            VetEntity vet = new VetEntity();
+//            vet.setUserId(user.getUserId());
+//            vet.setName(user.getName());
+//            vet.setEmail(user.getEmail());
+//            vet.setAddress(user.getAddress());
+//            vet.setPhoneNumber(user.getPhoneNumber());
+//            vet.setVetImage(user.getVetImage());
+//            vet.setConsultationCount(0); // 초기 상담 건수
+//            vet.setVetRating(0); // 초기 평점
+//            vet.setVetReview(""); // 초기 리뷰
+//            vetRepository.save(vet); // 저장
+//            // }
+//        }
     }
 }

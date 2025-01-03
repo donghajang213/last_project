@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.entity.VetEntity;
+import com.example.service.UserService;
 import com.example.service.VetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/vets")
 public class VetController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private VetService vetService;
